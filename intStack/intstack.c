@@ -1,6 +1,7 @@
 #include <stdint.h> /* uint8_t */
 #include <stdlib.h> /* malloc  */
 #include <stdio.h>  /* perror  */
+#include <errno.h>  /* errno   */
 #include "inc/intstack.h"
 
 void push_is(struct node_is** top, uint8_t v) {
@@ -9,6 +10,7 @@ void push_is(struct node_is** top, uint8_t v) {
 
 	/* check if the heap is full */
 	if (node == 0) {
+		errno = ENOMEM;
 		perror("Error al obtener espacio en memoria (malloc)\n");
 		return;
 	}
@@ -27,12 +29,12 @@ int8_t isempty_is(struct node_is** top) {
 }
 
 int8_t pop_is(struct node_is** top) {
-	uint8_t dato;
+	int8_t dato;
 	struct node_is* node;
 
 	/* stack underflow */
 	if (*top == NULL) {
-		perror("Error: la pila está vacía\n");
+		printf("Error: la pila está vacía\n");
 		return -1;
 	}
 	node = *top;
@@ -46,7 +48,7 @@ int8_t pop_is(struct node_is** top) {
 }
 
 void print_is(struct node_is** top) {
-	int dato = 0;
+	int8_t dato = 0;
 	if (isempty_is(top) == 0) {
 		printf("[   | 0x%08X]", (*top)->next);
 		dato = pop_is(top);
