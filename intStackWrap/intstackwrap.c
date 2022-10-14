@@ -72,13 +72,18 @@ int8_t pop_is(struct intstack* stack) {
 
 
 void print_is(struct intstack* stack) {
-	int8_t dato = 0;
-	if (isempty_is(stack) == 0) {
-		printf("[0x%p |", (void *) stack->top);
-		dato = pop_is(stack);
-		printf("%3hhu]\n", dato);
-		print_is(stack);
-		push_is(stack, dato);
+	uint8_t i= 0;
+	struct node_is* nodo = NULL;
+
+	if (isempty_is(stack) == 1) {
+		return;
+	}
+
+	nodo = stack->top;
+	printf("Top: 0x%p\n", stack->top);
+	for (i = 0; i < stack->numitems; i++) {
+		printf("[0x%p -> 0x%p | %3hhu]\n", nodo, nodo->next, nodo->value);
+		nodo = nodo->next;
 	}
 }
 
