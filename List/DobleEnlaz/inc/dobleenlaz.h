@@ -17,10 +17,14 @@ struct dlList {
 
 
 struct dlList* dlLinit();
+void     dlLdelete (struct dlList* list);
 void     dlLinsert (struct dlList* list, void *v);
 int8_t   dlLisempty(struct dlList* list);
-void    *dlLpeek   (struct dlList* list, int8_t pos);
 uint8_t  dlLnumelem(struct dlList* list);
+void     dlLimprime(struct dlList* list);
+struct dlNode* dlLgetopos(struct dlList* list, int8_t pos);
+void    *dlLpeek   (struct dlList* list, int8_t pos);
+void     dlLdelindx(struct dlList* list, int8_t pos);
 
 #endif /* __DOBLEENLAZ_H__ */
 

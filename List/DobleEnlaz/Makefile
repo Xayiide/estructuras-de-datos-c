@@ -8,7 +8,7 @@ SOURCES  = prueba.c dobleenlaz.c
 OBJECTS  = $(SOURCES:.c=.o)
 
 
-.PHONY: clean
+.PHONY: all clean re
 
 all: $(TARGET)
 
@@ -18,3 +18,6 @@ $(TARGET): $(OBJECTS)
 
 clean:
 	@rm -f $(TARGET) $(OBJECTS)
+	@echo "clean"
+
+re: clean all 
