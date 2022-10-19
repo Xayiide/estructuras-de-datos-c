@@ -16,6 +16,7 @@ struct intqueue {
 
 
 struct intqueue* init_iq();
+void    delete_iq (struct intqueue* queue);
 void    enqueue_iq(struct intqueue* queue, uint8_t v);
 int8_t  isempty_iq(struct intqueue* queue);
 int8_t  dequeue_iq(struct intqueue* queue);

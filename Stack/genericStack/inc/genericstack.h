@@ -14,6 +14,7 @@ struct gStack {
 };
 
 struct gStack* gSinit();
+void    gSdelete (struct gStack* stack);
 void    gSpush   (struct gStack* stack, void *v);
 int8_t  gSisempty(struct gStack* stack);
 void   *gSpop    (struct gStack* stack);

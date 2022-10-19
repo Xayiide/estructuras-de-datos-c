@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h> /* free */
 #include "inc/intqueue.h"
 
 int main(int argc, char** argv) {
@@ -21,6 +22,9 @@ int main(int argc, char** argv) {
 
 	printf("Imprimimos la cola:\n");
 	print_iq(&ppo, &fin);
+
+	free(ppo);
+	free(fin);
 
 	return 0;
 }

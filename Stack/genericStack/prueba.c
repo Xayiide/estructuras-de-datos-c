@@ -23,6 +23,7 @@ int main(int argc, char **argv) {
     pop = gSpop(genS);
     printf("pop: %d\n", *((int *) pop));
 
+    gSdelete(genS);
 
     return 0;
 }

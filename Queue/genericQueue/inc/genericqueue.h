@@ -15,6 +15,7 @@ struct gQueue {
 };
 
 struct gQueue* gQinit();
+void    gQdelete (struct gQueue* queue);
 void    gQenqueue(struct gQueue* queue, void *v);
 int8_t  gQisempty(struct gQueue* queue);
 void   *gQdequeue(struct gQueue* queue);

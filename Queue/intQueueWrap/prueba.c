@@ -19,11 +19,6 @@ int main(int argc, char** argv) {
 	dequeue_iq(queue_1);
 	enqueue_iq(queue_1, 50);
 	dequeue_iq(queue_1);
-	dequeue_iq(queue_1);
-	dequeue_iq(queue_1);
-	dequeue_iq(queue_1);
-	dequeue_iq(queue_1);
-	dequeue_iq(queue_1);
 
 	if (isempty_iq(queue_1) == 0) {
 		printf("La cola no está vacía\n");
@@ -35,6 +30,7 @@ int main(int argc, char** argv) {
 	printf("Imprimimos la cola:\n");
 	print_iq(queue_1);
 
+	delete_iq(queue_1);
 
 	return 0;
 }

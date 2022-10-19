@@ -25,6 +25,7 @@ int main(int argc, char** argv) {
     pop = gQdequeue(genQ);
     printf("dequeue: %c\n", *((char *)pop));
 
+    gQdelete(genQ);
 
     return 0;
 }

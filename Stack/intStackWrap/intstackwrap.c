@@ -90,3 +90,7 @@ void print_is(struct intstack* stack) {
 uint8_t numelem_is(struct intstack* stack) {
 	return stack->numitems;
 }
+
+void delete_is(struct intstack* stack) {
+	free(stack);
+}

@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h> /* free */
 #include "inc/intstack.h"
 
 int main(int argc, char** argv) {
@@ -21,6 +22,8 @@ int main(int argc, char** argv) {
 	}
 	printf("Imprimimos la pila:\n");
 	print_is(&top);
+
+	free(top);
 
 	return 0;
 }

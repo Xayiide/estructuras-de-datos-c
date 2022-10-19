@@ -50,7 +50,7 @@ int8_t pop_is(struct node_is** top) {
 void print_is(struct node_is** top) {
 	int8_t dato = 0;
 	if (isempty_is(top) == 0) {
-		printf("[   | 0x%08X]", (*top)->next);
+		printf("[   | 0x%p]", (*top)->next);
 		dato = pop_is(top);
 		printf("\r[%03hhu\n", dato);
 		print_is(top);

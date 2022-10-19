@@ -98,3 +98,6 @@ uint8_t numelem_iq(struct intqueue* queue) {
 	return queue->numitems;
 }
 
+void delete_iq(struct intqueue* queue) {
+	free(queue);
+}

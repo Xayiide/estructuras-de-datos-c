@@ -79,3 +79,7 @@ void *gQdequeue(struct gQueue* queue) {
 uint8_t gQnumelem(struct gQueue* queue) {
     return queue->numitems;
 }
+
+void gQdelete(struct gQueue* queue) {
+    free(queue);
+}

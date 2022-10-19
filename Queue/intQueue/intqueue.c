@@ -68,7 +68,7 @@ int8_t dequeue_iq(struct node_iq** inicio, struct node_iq** fin) {
 void print_iq(struct node_iq** inicio, struct node_iq** fin) {
 	int8_t dato = 0;
 	if (isempty_iq(inicio, fin) == 0) {
-		printf("[   | 0x%08X]", (*inicio)->next);
+		printf("[   | 0x%p]", (*inicio)->next);
 		dato = dequeue_iq(inicio, fin);
 		printf("\r[%03hhu\n", dato);
 		print_iq(inicio, fin);

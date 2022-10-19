@@ -15,6 +15,7 @@ struct intstack {
 
 
 struct intstack* init_is();
+void    delete_is (struct intstack* stack);
 void    push_is   (struct intstack* stack, uint8_t v);
 int8_t  isempty_is(struct intstack* stack);
 int8_t  pop_is    (struct intstack* stack);

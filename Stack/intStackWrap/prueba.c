@@ -25,5 +25,7 @@ int main(int argc, char** argv) {
 	printf("Imprimimos la pila:\n");
 	print_is(stack_1);
 
+	delete_is(stack_1);
+
 	return 0;
 }

@@ -64,3 +64,7 @@ void *gSpop(struct gStack* stack) {
 
     return dato;
 }
+
+void gSdelete(struct gStack* stack) {
+    free(stack);
+}
