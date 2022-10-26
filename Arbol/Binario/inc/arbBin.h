@@ -17,10 +17,12 @@ struct arbbin {
 
 struct arbbin *creaArbbin();
 struct abNodo *creaAbnodo(uint8_t v);
-void    freeArbbin(struct arbbin*);
-void    imprimeArbbin(struct arbbin*);
-void    insertaNodo(struct arbbin*,
-                    struct abNodo*);
+void    freeArbbin      (struct arbbin*);
+void    imprimeArbbin   (struct arbbin*);
+void    recorreCentral  (struct arbbin*);
+void    recorrePreorden (struct arbbin*);
+void    recorrePostorden(struct arbbin*);
+uint8_t inserta(struct arbbin*, uint8_t);
 
 #endif
 

@@ -1,5 +1,5 @@
-CC = gcc
-CFALGS = -Wall -Wextra -O0 -g
+CC     = gcc
+CFLAGS = -Wall -Wextra -O0 -g3
 
 TARGET = prueba
 OBJS   = prueba.o arbBin.o
