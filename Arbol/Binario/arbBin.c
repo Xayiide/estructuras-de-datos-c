@@ -6,13 +6,15 @@
 
 
 /* Funciones internas */
+static struct abNodo *buscaNodo(struct abNodo* nodo, uint8_t v);
+
 static uint8_t insertaNodo   (struct abNodo** raiz, struct abNodo* n);
 static void    imprimeNodo   (struct abNodo* nodo);
 static void    recorrePre    (struct abNodo* nodo);
 static void    recorreCentral(struct abNodo* nodo);
 static void    recorrePost   (struct abNodo* nodo);
 static void    borraNodo     (struct abNodo* nodo);
-
+static uint8_t compruebaRDcha(struct abNodo* nodo);
 
 
 
@@ -50,8 +52,53 @@ struct abNodo *creaAbnodo(uint8_t v) {
 	return nodo;
 }
 
+static struct abNodo *buscaNodo(struct abNodo* nodo, uint8_t v) {
+	struct abNodo *n = NULL;
 
-/* puntero doble porque si no, no puedo modificarlo */
+	if (v == nodo->valor) {
+		n = nodo;
+	}
+	else if (v < nodo->valor) {
+		if (nodo->izda == NULL) {
+			printf("El valor buscado no existe.\n");
+			n = NULL;
+		}
+		else {
+			n = buscaNodo(nodo->izda, v);
+		}
+	}
+	else if (v > nodo->valor) {
+		if (nodo->dcha == NULL) {
+			printf("El valor buscado no existe.\n");
+			n = NULL;
+		}
+		else {
+			n = buscaNodo(nodo->dcha, v);
+		}
+	}
+
+	return n;
+}
+
+struct abNodo *buscaValor(struct arbbin* arb, uint8_t v) {
+	struct abNodo *nodo = NULL;
+	if (arb == NULL) {
+		printf("El árbol es nulo.\n");
+		return NULL;
+	}
+
+	nodo = arb->raiz;
+	if (nodo == NULL) {
+		printf("El árbol está vacío.\n");
+		return NULL;
+	}
+
+	nodo = buscaNodo(nodo, v);
+
+	return nodo;
+}
+
+/* puntero doble porque si no no puedo modificarlo */
 static uint8_t insertaNodo(struct abNodo **raiz, struct abNodo *n) {
 	struct abNodo *r = *raiz;
 	uint8_t res = 0;
@@ -186,6 +233,72 @@ void recorreArbbin(struct arbbin* arb, enum ordenRec orden) {
 	}
 }
 
+
+enum tipoNodo tipoNodo(struct abNodo *nodo) {
+	enum tipoNodo tipo;
+
+	if (nodo == NULL) {
+		printf("El nodo es nulo.\n");
+		return 0;
+	}
+	else if ((nodo->izda == NULL) && (nodo->dcha == NULL)) {
+		tipo = HOJA;
+	}
+	else if ((nodo->izda != NULL) && (nodo->dcha != NULL)) {
+		tipo = COMPLETO;
+	}
+	else {
+		tipo = INCOMPLETO;
+	}
+
+	return tipo;
+
+}
+
+
+/* Comprueba todas las condiciones para que un nodo se pueda
+ * rotar a la derecha.
+ */
+static uint8_t compruebaRDcha(struct abNodo* nodo) {
+	uint8_t res = 1;
+
+	if (nodo == NULL || nodo->izda == NULL || nodo->dcha == NULL) {
+		res = 0;
+	}
+
+	if (tipoNodo(nodo) != COMPLETO || tipoNodo(nodo->izda) != COMPLETO) {
+		res = 0;
+	}
+
+	if ((tipoNodo(nodo->dcha)       != HOJA ||
+		 tipoNodo(nodo->izda->izda) != HOJA ||
+		 tipoNodo(nodo->izda->dcha) != HOJA)) {
+		res = 0;
+	}
+
+	return res;
+}
+
+void rotaDcha(struct abNodo *nodo) {
+	struct abNodo *aux = NULL;
+	uint8_t       vaux;
+
+	if (compruebaRDcha(nodo) != 1) {
+		printf("El nodo no reúne las condiciones para ser rotado.\n");
+		return;
+	}
+
+	aux  = nodo->dcha;
+	vaux = nodo->valor;
+
+	nodo->dcha        = nodo->izda;
+	nodo->valor       = nodo->izda->valor;
+	nodo->izda        = nodo->dcha->izda;
+	nodo->dcha->izda  = nodo->dcha->dcha;
+	nodo->dcha->dcha  = aux;
+	nodo->dcha->valor = vaux;
+
+}
 
 
 static void borraNodo(struct abNodo* nodo) {
