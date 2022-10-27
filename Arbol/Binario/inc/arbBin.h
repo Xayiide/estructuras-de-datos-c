@@ -3,6 +3,11 @@
 
 #include <stdint.h>
 
+enum ordenRec {
+	ORDENCENTRAL = 1,
+	PREORDEN     = 2,
+	POSTORDEN    = 3
+};
 
 struct abNodo {
 	struct abNodo *izda;
@@ -15,14 +20,13 @@ struct arbbin {
     uint8_t numelem;
 };
 
+
 struct arbbin *creaArbbin();
 struct abNodo *creaAbnodo(uint8_t v);
-void    freeArbbin      (struct arbbin*);
+void    borraArbbin     (struct arbbin*);
 void    imprimeArbbin   (struct arbbin*);
-void    recorreCentral  (struct arbbin*);
-void    recorrePreorden (struct arbbin*);
-void    recorrePostorden(struct arbbin*);
-uint8_t inserta(struct arbbin*, uint8_t);
+void    recorreArbbin   (struct arbbin*, enum ordenRec orden);
+uint8_t inserta         (struct arbbin*, uint8_t);
 
 #endif
 

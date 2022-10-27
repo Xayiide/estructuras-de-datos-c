@@ -5,10 +5,16 @@
 #include "inc/arbBin.h"
 
 
-
 /* Funciones internas */
-static uint8_t insertaNodo(struct abNodo** raiz, struct abNodo* n);
-static void    imprimeNodo(struct abNodo* n);
+static uint8_t insertaNodo   (struct abNodo** raiz, struct abNodo* n);
+static void    imprimeNodo   (struct abNodo* nodo);
+static void    recorrePre    (struct abNodo* nodo);
+static void    recorreCentral(struct abNodo* nodo);
+static void    recorrePost   (struct abNodo* nodo);
+static void    borraNodo     (struct abNodo* nodo);
+
+
+
 
 struct arbbin *creaArbbin() {
 	struct arbbin *arbol = NULL;
@@ -16,7 +22,7 @@ struct arbbin *creaArbbin() {
 
 	if (arbol == NULL) {
 		errno = ENOMEM;
-		perror("Error al reservar memoria para el árbol (malloc)\n");
+		perror("Error al reservar memoria para el árbol (malloc).\n");
 		return NULL;
 	}
 	
@@ -33,7 +39,7 @@ struct abNodo *creaAbnodo(uint8_t v) {
 
 	if (nodo == NULL) {
 		errno = ENOMEM;
-		perror("Error al reservar memoria para el nodo (malloc)\n");
+		perror("Error al reservar memoria para el nodo (malloc).\n");
 		return NULL;
 	}
 
@@ -43,6 +49,7 @@ struct abNodo *creaAbnodo(uint8_t v) {
 
 	return nodo;
 }
+
 
 /* puntero doble porque si no, no puedo modificarlo */
 static uint8_t insertaNodo(struct abNodo **raiz, struct abNodo *n) {
@@ -55,7 +62,7 @@ static uint8_t insertaNodo(struct abNodo **raiz, struct abNodo *n) {
 	else {
 		/* Intentamos insertar el mismo valor */
 		if (n->valor == r->valor) {
-			printf("No se puede insertar dos veces el mismo valor\n");
+			printf("No se puede insertar dos veces el mismo valor.\n");
 			res = 0;
 		}
 		else if (n->valor < r->valor) {
@@ -73,7 +80,7 @@ uint8_t inserta(struct arbbin* arb, uint8_t v) {
 	uint8_t res;
 	if (nodo == NULL) {
 		errno = ENOMEM;
-		perror("Error al reservar memoria para el nodo (malloc)\n");
+		perror("Error al reservar memoria para el nodo (malloc).\n");
 		return 1;
 	}
 
@@ -109,11 +116,109 @@ void imprimeArbbin(struct arbbin *arb) {
 		printf("}\n");
 	}
 	else {
-		printf("El arbol está vacío\n");
+		printf("El árbol está vacío.\n");
 	}
 }
 
 
-/* 1. libera cada nodo  
-   2. libera arbol
+
+static void recorrePre(struct abNodo* nodo) {
+	printf("%d ", nodo->valor);
+
+	if (nodo->izda != NULL) {
+		recorrePre(nodo->izda);
+	}
+
+	if (nodo->dcha != NULL) {
+		recorrePre(nodo->dcha);
+	}
+}
+
+static void recorreCentral(struct abNodo* nodo) {
+	if (nodo->izda != NULL) {
+		recorreCentral(nodo->izda);
+	}
+
+	printf("%d ", nodo->valor);
+
+	if (nodo->dcha != NULL) {
+		recorreCentral(nodo->dcha);
+	}
+}
+
+static void recorrePost(struct abNodo* nodo) {
+	if (nodo->izda != NULL) {
+		recorrePost(nodo->izda);
+	}
+
+	if (nodo->dcha != NULL) {
+		recorrePost(nodo->dcha);
+	}
+
+	printf("%d ", nodo->valor);
+}
+
+static void recorreNodo(struct abNodo* nodo, enum ordenRec orden) {
+	switch (orden) {
+	case PREORDEN:
+		recorrePre(nodo);
+		break;
+	case ORDENCENTRAL:
+		recorreCentral(nodo);
+		break;
+	case POSTORDEN:
+		recorrePost(nodo);
+		break;
+	}
+
+}
+
+void recorreArbbin(struct arbbin* arb, enum ordenRec orden) {
+	struct abNodo* nodo = NULL;
+	nodo = arb->raiz;
+
+	if (nodo != NULL) {
+		recorreNodo(nodo, orden);
+		printf("\n");
+	}
+	else {
+		printf("El árbol está vacío.\n");
+	}
+}
+
+
+
+static void borraNodo(struct abNodo* nodo) {
+	if (nodo->izda != NULL) {
+		borraNodo(nodo->izda);
+	}
+
+	if (nodo->dcha != NULL) {
+		borraNodo(nodo->dcha);
+	}
+
+	free(nodo);
+}
+
+/* Borra nodos en post orden
+ * 1. libera cada nodo
+ * 2. libera arbol
 */
+void borraArbbin(struct arbbin* arb) {
+	struct abNodo* nodo = NULL;
+
+	if (arb == NULL) {
+		printf("Error. Árbol nulo.\n");
+		return;
+	}
+
+	nodo = arb->raiz;
+	if (nodo != NULL) {
+		borraNodo(nodo);
+	}
+	else {
+		printf("El árbol está vacío.\n");
+	}
+
+	free(arb);
+}

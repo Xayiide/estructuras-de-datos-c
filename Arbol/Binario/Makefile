@@ -5,20 +5,23 @@ TARGET = prueba
 OBJS   = prueba.o arbBin.o
 ARBOL  = arbol.pdf
 
-.PHONY: all clean re
+.PHONY: all vis clean re
 
 
 all: $(TARGET)
 
+vis: $(TARGET)
+	./$(TARGET) | dot -Tpdf > $(ARBOL)
+
+vis: VIS=-DVIS
+
 $(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $^ -o $@
+	$(CC) $(CFLAGS) $(VIS) $^ -o $@
 	@rm -f $(OBJS)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -c $^ -o $@
+	$(CC) $(CFLAGS) $(VIS) -c $^ -o $@
 
-vis: $(TARGET)
-	./$(TARGET) | dot -Tpdf > $(ARBOL)
 
 clean:
 	@rm -f $(TARGET) $(OBJS) $(ARBOL)
