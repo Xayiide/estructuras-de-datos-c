@@ -27,6 +27,7 @@ int main(void) {
 
 	nodo = buscaValor(arbol, 30);
 	rotaDcha(nodo);
+	rotaIzda(nodo);
 
 	imprimeArbbin(arbol);
 

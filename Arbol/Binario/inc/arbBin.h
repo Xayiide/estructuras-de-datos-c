@@ -35,6 +35,7 @@ void    borraArbbin     (struct arbbin*);
 void    imprimeArbbin   (struct arbbin*);
 void    recorreArbbin   (struct arbbin*, enum ordenRec orden);
 void    rotaDcha        (struct abNodo*);
+void    rotaIzda        (struct abNodo*);
 uint8_t inserta         (struct arbbin*, uint8_t);
 enum tipoNodo tipoNodo  (struct abNodo*);
 

@@ -15,6 +15,7 @@ static void    recorreCentral(struct abNodo* nodo);
 static void    recorrePost   (struct abNodo* nodo);
 static void    borraNodo     (struct abNodo* nodo);
 static uint8_t compruebaRDcha(struct abNodo* nodo);
+static uint8_t compruebaRIzda(struct abNodo* nodo);
 
 
 
@@ -256,6 +257,25 @@ enum tipoNodo tipoNodo(struct abNodo *nodo) {
 }
 
 
+static uint8_t compruebaRIzda(struct abNodo* nodo) {
+	uint8_t res = 1;
+	if (nodo == NULL || nodo->izda == NULL || nodo->dcha == NULL) {
+		res = 0;
+	}
+
+	if (tipoNodo(nodo) != COMPLETO || tipoNodo(nodo->dcha) != COMPLETO) {
+		res = 0;
+	}
+
+	if ((tipoNodo(nodo->izda)       != HOJA ||
+		 tipoNodo(nodo->dcha->izda) != HOJA ||
+		 tipoNodo(nodo->dcha->dcha) != HOJA)) {
+		res = 0;
+	}
+
+	return res;
+}
+
 /* Comprueba todas las condiciones para que un nodo se pueda
  * rotar a la derecha.
  */
@@ -300,6 +320,26 @@ void rotaDcha(struct abNodo *nodo) {
 
 }
 
+void rotaIzda(struct abNodo *nodo) {
+	struct abNodo *aux = NULL;
+	uint8_t       vaux;
+
+	if (compruebaRIzda(nodo) != 1) {
+		printf("El nodo no reúne las condiciones para ser rotado.\n");
+		return;
+	}
+
+	aux  = nodo->izda;
+	vaux = nodo->valor;
+
+	nodo->izda        = nodo->dcha;
+	nodo->valor       = nodo->dcha->valor;
+	nodo->dcha        = nodo->izda->dcha;
+	nodo->izda->dcha  = nodo->izda->izda;
+	nodo->izda->izda  = aux;
+	nodo->izda->valor = vaux;
+
+}
 
 static void borraNodo(struct abNodo* nodo) {
 	if (nodo->izda != NULL) {
