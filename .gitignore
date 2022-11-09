@@ -2,6 +2,9 @@
 *.swp
 .~
 
+# pdf
+*,pdf
+
 # executables, libraries, objects
 *.o
 *.obj
