@@ -3,7 +3,7 @@
 .~
 
 # pdf
-*,pdf
+*.pdf
 
 # executables, libraries, objects
 *.o
