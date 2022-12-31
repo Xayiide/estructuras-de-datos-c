@@ -3,28 +3,35 @@
 
 #include <stdint.h>
 
+typedef enum {
+	COMPLETO   = 1, /* Nodo interior completo   */
+	INCOMPLETO = 2, /* Nodo interior incompleto */
+	HOJA       = 3  /* Nodo hoja                */
+} tiponodo;
 
 
-
-typedef struct {
+typedef struct nodoavl nodoavl;
+struct nodoavl {
 	struct nodoavl *izda;
 	struct nodoavl *dcha;
 	uint8_t  valor;
 	uint8_t  altura;
-} nodoavl ;
+};
 
 typedef struct {
 	nodoavl *raiz;
 	uint8_t  numelem;
 } arbolavl;
 
-arbolavl *creaAVL();
-void      borraAVL(arbolavl *);
-//struct nodoavl  *creaAVLNodo(uint8_t);
+arbolavl *creaAVL     ();
+void      borraAVL    (arbolavl *);
+uint8_t   insertaNodo (arbolavl *, uint8_t);
 
-//void borraArbolAVL   (struct arbolavl*);
-//void imprimeArbolAVL (struct arbolavl*);
-//void recorreArbolAVL (struct arbolavl*);
+void imprimeArbolAVL  (arbolavl*);
+
+tiponodo tipoNodo     (nodoavl *);
+uint8_t  altura       (nodoavl *);
+int8_t   factorBalance(nodoavl *);
 
 
 #endif

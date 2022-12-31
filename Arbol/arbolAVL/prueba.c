@@ -3,9 +3,9 @@
 
 
 int main(void) {
-	arbolavl *arbol = NULL;
-	arbol = creaAVL();
+//	arbolavl *arbol = NULL;
+//	arbol = creaAVL();
 
-
+	return 0;
 
 }
