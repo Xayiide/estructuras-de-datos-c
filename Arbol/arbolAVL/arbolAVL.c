@@ -5,22 +5,11 @@
 
 #include "inc/arbolAVL.h"
 
+#define max(a, b) ((a) > (b) ? (a) : (b))
+
 static void    borraNodo  (nodoavl* nodo);
 static void    imprimeNodo(nodoavl* nodo);
-static uint8_t max        (uint8_t a, uint8_t b);
 static uint8_t inserta    (nodoavl **raiz, nodoavl *nodo);
-
-
-static uint8_t max(uint8_t a, uint8_t b) {
-	uint8_t max;
-
-	if (a >= b)
-		max = a;
-	else
-		max = b;
-
-	return max;
-}
 
 
 arbolavl *creaAVL() {
@@ -105,16 +94,23 @@ uint8_t insertaNodo(arbolavl *arb, uint8_t valor) {
 		return 0;
 	}
 
-	nodo->dcha = nodo->izda = NULL;
-	nodo->valor = valor;
+	nodo->dcha   = nodo->izda = NULL;
+	nodo->valor  = valor;
+	nodo->altura = 1;
 
 	res = inserta(&(arb->raiz), nodo);
-	if (res == 1)
+	if (res == 1) {
 		arb->numelem++;
+		equilibrarArbol(arb);
+	}
 
 	return res;
 }
 
+void equilibrarArbol(arbolavl *arb) {
+	printf("TODO\n");
+	return;
+}
 
 
 

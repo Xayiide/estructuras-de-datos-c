@@ -27,6 +27,7 @@ typedef struct {
 arbolavl *creaAVL     ();
 void      borraAVL    (arbolavl *);
 uint8_t   insertaNodo (arbolavl *, uint8_t);
+void      equilibrarArbol(arbolavl *);
 
 void imprimeArbolAVL  (arbolavl*);
 
