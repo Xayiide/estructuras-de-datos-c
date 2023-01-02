@@ -81,11 +81,17 @@ static uint8_t inserta(nodoavl **raiz, nodoavl *nodo) {
 		res   = 1;
 	}
 	else {
-
+		if (nodo->valor == r->valor) {
+			printf("Ese valor ya está en el árbol\n");
+			res = 0;
+		}
+		else if (nodo->valor < r->valor) {
+			res = inserta(&(r->izda), nodo);
+		}
+		else {
+			res = inserta(&(r->dcha), nodo);
+		}
 	}
-
-
-
 	return res;
 }
 
@@ -124,7 +130,7 @@ static void imprimeNodo(nodoavl *nodo) {
 	}
 }
 
-void imprimeArbolaVL(arbolavl* arb) {
+void imprimeArbolAVL(arbolavl* arb) {
 	struct nodoavl *nodo = NULL;
 
 	if (arb == NULL) {

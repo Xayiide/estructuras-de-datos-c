@@ -16,6 +16,7 @@ struct nodoavl {
 	struct nodoavl *dcha;
 	uint8_t  valor;
 	uint8_t  altura;
+	int8_t   avl_balance;
 };
 
 typedef struct {
