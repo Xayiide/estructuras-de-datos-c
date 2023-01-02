@@ -5,7 +5,7 @@ TARGET = prueba
 OBJS   = prueba.o arbBin.o
 ARBOL  = arbol.pdf
 
-.PHONY: all vis clean re
+.PHONY: all vis clean re open
 
 
 all: $(TARGET)
@@ -27,3 +27,6 @@ clean:
 	@rm -f $(TARGET) $(OBJS) $(ARBOL)
 
 re: clean all
+
+open: clean vis
+	@xdg-open $(ARBOL)

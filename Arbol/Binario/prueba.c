@@ -20,16 +20,19 @@ int main(void) {
 	inserta(arbol, 30);
 	inserta(arbol, 20);
 	inserta(arbol, 15);
-	inserta(arbol, 25);
 	inserta(arbol, 35);
-
-	//imprimeArbbin(arbol);
+	inserta(arbol, 40);
 
 	nodo = buscaValor(arbol, 30);
 	rotaDcha(nodo);
-	rotaIzda(nodo);
 
 	imprimeArbbin(arbol);
+
+	//nodo = buscaValor(arbol, 30);
+	//rotaDcha(nodo);
+	//rotaIzda(nodo);
+
+	//imprimeArbbin(arbol);
 
 
 #ifndef VIS
