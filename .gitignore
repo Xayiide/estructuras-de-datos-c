@@ -19,3 +19,9 @@
 
 # vscode
 .vscode
+
+# Los ficheros de libavl de GNU
+avl.c
+avl.h
+bst.c
+bst.h
