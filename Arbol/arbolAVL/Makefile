@@ -2,7 +2,7 @@ CC     = gcc
 CFLAGS = -Wall -Wextra -O0 -g3
  
 TARGET = prueba
-OBJS   = prueba.o arbolAVL.o
+OBJS   = prueba.o AVL.o
 ARBOL  = arbol.pdf
 
 .PHONY: all vis clean re open
