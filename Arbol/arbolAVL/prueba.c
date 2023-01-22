@@ -12,7 +12,12 @@ int main(void) {
     inserta(avl, 60);
     inserta(avl, 75);
 
+#ifndef VIS
+    printf("Nodos insertados. Recorriendo...\n");
+    recorreAvl(avl, PREORDEN);
+#else
     imprimeAvl(avl);
+#endif
 
     borraAvl(avl);
 

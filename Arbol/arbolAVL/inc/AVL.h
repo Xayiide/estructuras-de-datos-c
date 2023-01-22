@@ -3,6 +3,7 @@
 
 #include <stdint.h>
 
+
 typedef enum {
     ORDENCENTRAL = 1,
     PREORDEN     = 2,
@@ -19,9 +20,10 @@ typedef struct nodoavl nodoavl;
 struct nodoavl {
     nodoavl *izda;
     nodoavl *dcha;
-    uint8_t valor;
-    uint8_t altura;
-    int8_t  balance;
+    nodoavl *padre;
+    uint8_t  valor;
+    uint8_t   altura;
+    int8_t   balance;
 };
 
 typedef struct {
@@ -35,8 +37,13 @@ nodoavl *buscaValor(arbavl *, uint8_t); /* devuelve punt. a nodo con valor v */
 uint8_t inserta (arbavl  *, uint8_t);
 void borraAvl   (arbavl  *);
 void imprimeAvl (arbavl *);
+void recorreAvl (arbavl *, ordenRec);
+void balancea   (nodoavl *);
+
+
 void rotaIzda   (nodoavl *);
 void rotaDcha   (nodoavl *);
+
 
 tipoNodo tipoavl(nodoavl *);
 

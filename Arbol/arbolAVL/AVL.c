@@ -8,8 +8,14 @@
 static uint8_t  insertaNodo(nodoavl **, nodoavl *n);
 static nodoavl *buscaNodo  (nodoavl *, uint8_t);
 static void     borraNodo  (nodoavl *);
+static void     visNodo    (nodoavl *);
 static void     imprimeNodo(nodoavl *);
-
+static void     recorreNodo(nodoavl*, ordenRec);
+static void     recorrePre (nodoavl *);
+static void     recorreCentral(nodoavl *);
+static void     recorrePost(nodoavl *);
+static uint8_t  altura(nodoavl *);
+static int8_t   max(int8_t, int8_t);
 
 
 
@@ -58,13 +64,19 @@ uint8_t inserta(arbavl *arb, uint8_t valor) {
         return 1;
     }
 
-    nodo->dcha   = nodo->izda = NULL;
-    nodo->valor  = valor;
-    nodo->altura = 0;
+    nodo->dcha    = nodo->izda = NULL;
+    nodo->valor   = valor;
+    nodo->balance = 0;
+    // nodo->altura = 0; /* Se hace al balancear los nodos */
 
     res = insertaNodo(&(arb->raiz), nodo);
-    if (res == 0)
+    if (res == 0) {
         arb->numelem++;
+        balancea(nodo);
+    }
+    else {
+        free(nodo);
+    }
 
     return res;
 }
@@ -92,11 +104,45 @@ void imprimeAvl(arbavl *arb) {
 
     if (raiz != NULL) {
         printf("digraph {\n");
-        imprimeNodo(raiz);
+        visNodo(raiz);
         printf("}\n");
     }
     else {
         printf("El árbol está vacío.\n");
+    }
+}
+
+void recorreAvl(arbavl *arb, ordenRec orden) {
+    nodoavl* nodo = arb->raiz;
+
+    if (nodo != NULL) {
+        recorreNodo(nodo, orden);
+        printf("\n");
+    }
+    else {
+        printf("El árbol está vacío.\n");
+    }
+}
+
+void balancea(nodoavl *nodo) {
+    int8_t balance;
+    uint8_t altizda, altdcha;
+
+    while (nodo != NULL) {
+        altizda = altura(nodo->izda);
+        altdcha = altura(nodo->dcha);
+        balance = altizda - altdcha;
+        nodo->altura  = 1 + max(altizda, altdcha);
+        if (balance <= -2) { /* subarbol dcho desbalanceado */
+
+        }
+
+        else if (balance >= 2) { /* subarbol izdo desbalanceado */
+
+        }
+        /* actualizar balance */
+        nodo->balance = balance;
+        nodo = nodo->padre;
     }
 }
 
@@ -118,9 +164,11 @@ static uint8_t insertaNodo(nodoavl **raiz, nodoavl *nodo) {
             res = 1;
         }
         else if (nodo->valor < r->valor) {
+            nodo->padre = r;
             res = insertaNodo(&(r->izda), nodo);
         }
         else { /* nodo->valor > r->valor */
+            nodo->padre = r;
             res = insertaNodo(&(r->dcha), nodo);
         }
     }
@@ -156,17 +204,91 @@ static void borraNodo(nodoavl *nodo) {
     }
 }
 
-static void imprimeNodo(nodoavl* n) {
-    if (n->izda != NULL) {
-        printf("%d -> %d;\n", n->valor, n->izda->valor);
-        imprimeNodo(n->izda);
+static void visNodo(nodoavl* nodo) {
+    if (nodo->izda != NULL) {
+        printf("%d -> %d;\n", nodo->valor, nodo->izda->valor);
+        visNodo(nodo->izda);
     }
     
-    if (n->dcha != NULL) {
-        printf("%d -> %d;\n", n->valor, n->dcha->valor);
-        imprimeNodo(n->dcha);
+    if (nodo->dcha != NULL) {
+        printf("%d -> %d;\n", nodo->valor, nodo->dcha->valor);
+        visNodo(nodo->dcha);
     }
 }
+
+static void imprimeNodo(nodoavl *nodo) {
+    printf("|v%d|a%d|b%d", nodo->valor, nodo->altura, nodo->balance);
+    if (nodo->padre != NULL)
+        printf("|p%d", nodo->padre->valor);
+    printf("|\n");
+}
+
+static void recorreNodo(nodoavl* nodo, ordenRec orden) {
+    switch(orden) {
+    case PREORDEN:
+        recorrePre(nodo);
+        break;
+    case ORDENCENTRAL:
+        recorreCentral(nodo);
+        break;
+    case POSTORDEN:
+        recorrePost(nodo);
+        break;
+    default:
+        printf("Error: recorreNodo (default)\n");
+        break;
+    }
+}
+
+static void recorrePre(nodoavl *nodo) {
+    imprimeNodo(nodo);
+
+    if (nodo->izda != NULL) {
+        recorrePre(nodo->izda);
+    }
+    
+    if (nodo->dcha != NULL) {
+        recorrePre(nodo->dcha);
+    }
+}
+
+static void recorreCentral(nodoavl *nodo) {
+    if (nodo->izda != NULL) {
+        recorreCentral(nodo->izda);
+    }
+    
+    imprimeNodo(nodo);
+
+    if (nodo->dcha != NULL) {
+        recorreCentral(nodo->dcha);
+    }
+}
+
+static void recorrePost(nodoavl *nodo) {
+    if (nodo->izda != NULL) {
+        recorrePost(nodo->izda);
+    }
+
+    if (nodo->dcha != NULL) {
+        recorrePost(nodo->dcha);
+    }
+
+    imprimeNodo(nodo);
+}
+
+static uint8_t altura(nodoavl *nodo) {
+    if (nodo == NULL) {
+        return (-1);
+    }
+    else {
+        return nodo->altura;
+    }
+}
+
+static int8_t max(int8_t a, int8_t b) {
+    return (a >= b ? a : b);
+}
+
 
 
 
