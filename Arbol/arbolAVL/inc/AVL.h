@@ -38,7 +38,6 @@ uint8_t inserta (arbavl  *, uint8_t);
 void borraAvl   (arbavl  *);
 void imprimeAvl (arbavl *);
 void recorreAvl (arbavl *, ordenRec);
-void balancea   (nodoavl *);
 
 
 void rotaIzda   (nodoavl *);

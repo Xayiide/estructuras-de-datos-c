@@ -6,6 +6,7 @@
 #include "inc/AVL.h"
 
 static uint8_t  insertaNodo(nodoavl **, nodoavl *n);
+static void     balancea   (arbavl *, nodoavl *);
 static nodoavl *buscaNodo  (nodoavl *, uint8_t);
 static void     borraNodo  (nodoavl *);
 static void     visNodo    (nodoavl *);
@@ -16,6 +17,8 @@ static void     recorreCentral(nodoavl *);
 static void     recorrePost(nodoavl *);
 static uint8_t  altura(nodoavl *);
 static int8_t   max(int8_t, int8_t);
+static void     rotIzda(arbavl *, nodoavl *);
+static void     rotDcha(arbavl *, nodoavl *);
 
 
 
@@ -72,7 +75,7 @@ uint8_t inserta(arbavl *arb, uint8_t valor) {
     res = insertaNodo(&(arb->raiz), nodo);
     if (res == 0) {
         arb->numelem++;
-        balancea(nodo);
+        balancea(arb, nodo);
     }
     else {
         free(nodo);
@@ -124,28 +127,6 @@ void recorreAvl(arbavl *arb, ordenRec orden) {
     }
 }
 
-void balancea(nodoavl *nodo) {
-    int8_t balance;
-    uint8_t altizda, altdcha;
-
-    while (nodo != NULL) {
-        altizda = altura(nodo->izda);
-        altdcha = altura(nodo->dcha);
-        balance = altizda - altdcha;
-        nodo->altura  = 1 + max(altizda, altdcha);
-        if (balance <= -2) { /* subarbol dcho desbalanceado */
-
-        }
-
-        else if (balance >= 2) { /* subarbol izdo desbalanceado */
-
-        }
-        /* actualizar balance */
-        nodo->balance = balance;
-        nodo = nodo->padre;
-    }
-}
-
 
 
 
@@ -174,6 +155,47 @@ static uint8_t insertaNodo(nodoavl **raiz, nodoavl *nodo) {
     }
 
     return res;
+}
+
+/*
+ * Hay 4 casos para balancear:
+ * 1. 2 nodos descienden hacia la izda -> RR(nodo)
+ * 2. Zig-Zag (izda-dcha) -> LR(nodo->iz) RR(nodo)
+ * 3. Zag-Zig (dcha-izda) -> RR(nodo->de) LR(nodo)
+ * 4. 2 nodos descienden hacia la dcha -> LR(nodo)
+ */
+static void balancea(arbavl *arb, nodoavl *nodo) {
+    int8_t balance;
+    uint8_t altizda, altdcha;
+
+    while (nodo != NULL) {
+        altizda = altura(nodo->izda);
+        altdcha = altura(nodo->dcha);
+        balance = altizda - altdcha;
+        nodo->altura  = 1 + max(altizda, altdcha);
+        if (balance >= 2) { /* subarbol izdo desbalanceado */
+            if (altura(nodo->izda->izda) < altura(nodo->izda->dcha)) { /* 2 */
+                rotIzda(arb, nodo->izda);
+                rotDcha(arb, nodo);
+            }
+            else { /* 1 */
+                rotDcha(arb, nodo);
+            }
+        }
+        else if (balance <= -2) { /* subarbol dcho desbalanceado */
+            if (altura(nodo->dcha->dcha) < altura(nodo->dcha->izda)) { /* 3 */
+                rotDcha(arb, nodo->dcha);
+                rotIzda(arb, nodo);
+            }
+            else { /* 4 */
+                rotIzda(arb, nodo);
+            }
+        }
+
+        /* actualizar balance */
+        nodo->balance = balance;
+        nodo = nodo->padre;
+    }
 }
 
 static nodoavl *buscaNodo(nodoavl *nodo, uint8_t v) {
@@ -289,7 +311,55 @@ static int8_t max(int8_t a, int8_t b) {
     return (a >= b ? a : b);
 }
 
+static void rotIzda(arbavl *arb, nodoavl *nodo) {
+    nodoavl *aux = nodo->dcha; /* siempre existe? */
+    aux->padre   = nodo->padre; /* el nodo de su derecha toma su lugar */
 
+    if (aux->padre == NULL) {
+        arb->raiz = aux; /* Nueva raiz */
+    }
+    else {
+        if (aux->padre->izda == nodo)
+            aux->padre->izda = aux;
+        else if (aux->padre->dcha == nodo)
+            aux->padre->dcha = aux;
+    }
+
+    nodo->dcha = aux->izda;
+
+    if (nodo->dcha != NULL)
+        nodo->dcha->padre = nodo;
+
+    aux->izda    = nodo;
+    nodo->padre  = aux;
+    nodo->altura = 1 + max(altura(nodo->izda), altura(nodo->dcha));
+    aux->altura  = 1 + max(altura(aux->izda), altura(aux->dcha));
+}
+
+static void rotDcha(arbavl *arb, nodoavl *nodo) {
+    nodoavl *aux = nodo->izda;
+    aux->padre   = nodo->padre;
+
+    if (aux->padre == NULL) {
+        arb->raiz = aux;
+    }
+    else {
+        if (aux->padre->izda == nodo)
+            aux->padre->izda = aux;
+        else if (aux->padre->dcha == nodo)
+            aux->padre->dcha = aux;
+    }
+
+    nodo->izda = aux->dcha;
+
+    if (nodo->izda != NULL)
+        nodo->izda->padre = nodo;
+
+    aux->dcha    = nodo;
+    nodo->padre  = aux;
+    nodo->altura = 1 + max(altura(nodo->izda), altura(nodo->dcha));
+    aux->altura  = 1 + max(altura(aux->izda), altura(aux->dcha));
+}
 
 
 
