@@ -174,20 +174,20 @@ static void balancea(arbavl *arb, nodoavl *nodo) {
         balance = altizda - altdcha;
         nodo->altura  = 1 + max(altizda, altdcha);
         if (balance >= 2) { /* subarbol izdo desbalanceado */
-            if (altura(nodo->izda->izda) < altura(nodo->izda->dcha)) { /* 2 */
-                rotIzda(arb, nodo->izda);
+            if (altura(nodo->izda->izda) < altura(nodo->izda->dcha)) { /* 1 */
                 rotDcha(arb, nodo);
             }
-            else { /* 1 */
+            else { /* 2 */
+                rotIzda(arb, nodo->izda);
                 rotDcha(arb, nodo);
             }
         }
         else if (balance <= -2) { /* subarbol dcho desbalanceado */
-            if (altura(nodo->dcha->dcha) < altura(nodo->dcha->izda)) { /* 3 */
-                rotDcha(arb, nodo->dcha);
+            if (altura(nodo->dcha->dcha) < altura(nodo->dcha->izda)) { /* 4 */
                 rotIzda(arb, nodo);
             }
-            else { /* 4 */
+            else { /* 3 */
+                rotDcha(arb, nodo->dcha);
                 rotIzda(arb, nodo);
             }
         }

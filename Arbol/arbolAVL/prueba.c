@@ -1,16 +1,25 @@
 #include <stdio.h>
+#include <stdlib.h> /* atoi, rand, srand */
+#include <time.h>   /* time              */
 #include "inc/AVL.h"
 
 
-int main(void) {
+int main(int argc, char *argv[]) {
+    int i;
+    int v;
+    int nn = 10;
+
+    if (argc == 2) {
+        nn = atoi(argv[1]);
+    }
+
     arbavl *avl = creaAvl();
 
-    inserta(avl, 100);
-    inserta(avl, 35);
-    inserta(avl, 10);
-    inserta(avl, 5);
-    inserta(avl, 60);
-    inserta(avl, 75);
+    srand(time(NULL));
+    for (i = 0; i < nn; i++) {
+        v = rand() % (256); /* max uint8 */
+        inserta(avl, v);
+    }
 
 #ifndef VIS
     printf("Nodos insertados. Recorriendo...\n");
