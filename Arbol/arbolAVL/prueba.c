@@ -23,7 +23,10 @@ int main(int argc, char *argv[]) {
 
 #ifndef VIS
     printf("Nodos insertados. Recorriendo...\n");
-    recorreAvl(avl, PREORDEN);
+    if (balanceado(avl) == 0)
+        printf("Árbol balanceado. Éxito\n");
+    else
+        printf("Árbol no balanceado. Fracaso\n");
 #else
     imprimeAvl(avl);
 #endif

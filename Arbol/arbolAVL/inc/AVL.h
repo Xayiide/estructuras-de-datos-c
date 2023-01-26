@@ -33,11 +33,11 @@ typedef struct {
 
 arbavl  *creaAvl();
 nodoavl *buscaValor(arbavl *, uint8_t); /* devuelve punt. a nodo con valor v */
-
 uint8_t inserta (arbavl  *, uint8_t);
 void borraAvl   (arbavl  *);
 void imprimeAvl (arbavl *);
 void recorreAvl (arbavl *, ordenRec);
+int8_t balanceado(arbavl *);
 
 
 void rotaIzda   (nodoavl *);

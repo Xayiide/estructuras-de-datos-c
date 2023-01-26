@@ -15,10 +15,11 @@ static void     recorreNodo(nodoavl*, ordenRec);
 static void     recorrePre (nodoavl *);
 static void     recorreCentral(nodoavl *);
 static void     recorrePost(nodoavl *);
-static uint8_t  altura(nodoavl *);
+static int8_t   altura(nodoavl *);
 static int8_t   max(int8_t, int8_t);
 static void     rotIzda(arbavl *, nodoavl *);
 static void     rotDcha(arbavl *, nodoavl *);
+static int8_t   balanceadoNodo(nodoavl *);
 
 
 
@@ -127,7 +128,22 @@ void recorreAvl(arbavl *arb, ordenRec orden) {
     }
 }
 
+int8_t balanceado(arbavl *arb) {
+    nodoavl *nodo = arb->raiz;
+    int8_t izda, dcha;
 
+
+    if (arb == NULL) {
+        return -1;
+    }
+    izda = balanceadoNodo(nodo->izda);
+    dcha = balanceadoNodo(nodo->dcha);
+
+    if (abs(izda - dcha) > 1)
+        return -1;
+    else
+        return 0;
+}
 
 
 
@@ -141,7 +157,9 @@ static uint8_t insertaNodo(nodoavl **raiz, nodoavl *nodo) {
     }
     else {
         if (nodo->valor == r->valor) {
+#ifdef DEBUG
             printf("El valor %d ya existe en el árbol.\n", nodo->valor);
+#endif
             res = 1;
         }
         else if (nodo->valor < r->valor) {
@@ -160,13 +178,14 @@ static uint8_t insertaNodo(nodoavl **raiz, nodoavl *nodo) {
 /*
  * Hay 4 casos para balancear:
  * 1. 2 nodos descienden hacia la izda -> RR(nodo)
- * 2. Zig-Zag (izda-dcha) -> LR(nodo->iz) RR(nodo)
- * 3. Zag-Zig (dcha-izda) -> RR(nodo->de) LR(nodo)
- * 4. 2 nodos descienden hacia la dcha -> LR(nodo)
+ * 2. Zig-Zag (izda-dcha) -> RI(nodo->iz) + RD(nodo)
+ * 3. Zag-Zig (dcha-izda) -> RD(nodo->de) + RI(nodo)
+ * 4. 2 nodos descienden hacia la dcha -> RI(nodo)
  */
 static void balancea(arbavl *arb, nodoavl *nodo) {
     int8_t balance;
-    uint8_t altizda, altdcha;
+    int8_t altizda, altdcha;
+    int8_t hii, hid, hdd, hdi;
 
     while (nodo != NULL) {
         altizda = altura(nodo->izda);
@@ -174,7 +193,9 @@ static void balancea(arbavl *arb, nodoavl *nodo) {
         balance = altizda - altdcha;
         nodo->altura  = 1 + max(altizda, altdcha);
         if (balance >= 2) { /* subarbol izdo desbalanceado */
-            if (altura(nodo->izda->izda) < altura(nodo->izda->dcha)) { /* 1 */
+            hii = altura(nodo->izda->izda);
+            hid = altura(nodo->izda->dcha);
+            if (hii >= hid) { /* 1 */
                 rotDcha(arb, nodo);
             }
             else { /* 2 */
@@ -183,7 +204,9 @@ static void balancea(arbavl *arb, nodoavl *nodo) {
             }
         }
         else if (balance <= -2) { /* subarbol dcho desbalanceado */
-            if (altura(nodo->dcha->dcha) < altura(nodo->dcha->izda)) { /* 4 */
+            hdd = altura(nodo->dcha->dcha);
+            hdi = altura(nodo->dcha->izda);
+            if (hdd >= hdi) { /* 4 */
                 rotIzda(arb, nodo);
             }
             else { /* 3 */
@@ -298,7 +321,7 @@ static void recorrePost(nodoavl *nodo) {
     imprimeNodo(nodo);
 }
 
-static uint8_t altura(nodoavl *nodo) {
+static int8_t altura(nodoavl *nodo) {
     if (nodo == NULL) {
         return (-1);
     }
@@ -361,6 +384,28 @@ static void rotDcha(arbavl *arb, nodoavl *nodo) {
     aux->altura  = 1 + max(altura(aux->izda), altura(aux->dcha));
 }
 
+int8_t balanceadoNodo(nodoavl *nodo) {
+    int8_t izda, dcha;
+
+    if (nodo == NULL) {
+        return 0;
+    }
+    izda = balanceadoNodo(nodo->izda);
+    if (izda == -1) {
+        return -1;
+    }
+
+    dcha = balanceadoNodo(nodo->dcha);
+    if (dcha == -1) {
+        return -1;
+    }
+
+    if (abs(izda - dcha) > 1)
+        return -1;
+    else
+        return izda > dcha ? izda + 1 : dcha + 1;
+
+}
 
 
 
