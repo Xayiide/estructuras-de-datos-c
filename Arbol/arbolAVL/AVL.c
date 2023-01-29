@@ -5,10 +5,12 @@
 
 #include "inc/AVL.h"
 
-static uint8_t  insertaNodo(nodoavl **, nodoavl *n);
-static void     balancea   (arbavl *, nodoavl *);
-static nodoavl *buscaNodo  (nodoavl *, uint8_t);
-static void     borraNodo  (nodoavl *);
+static uint8_t  insertaNodo (nodoavl **, nodoavl *n);
+static void     balancea    (arbavl *, nodoavl *);
+static nodoavl *buscaNodo   (nodoavl *, uint8_t);
+static int8_t   borraNodo   (nodoavl *);
+static void     borraAvlNodo(nodoavl *);
+
 static void     visNodo    (nodoavl *);
 static void     imprimeNodo(nodoavl *);
 static void     recorreNodo(nodoavl*, ordenRec);
@@ -20,6 +22,7 @@ static int8_t   max(int8_t, int8_t);
 static void     rotIzda(arbavl *, nodoavl *);
 static void     rotDcha(arbavl *, nodoavl *);
 static int8_t   balanceadoNodo(nodoavl *);
+static nodoavl *sucesor(nodoavl *);
 
 
 
@@ -85,6 +88,21 @@ uint8_t inserta(arbavl *arb, uint8_t valor) {
     return res;
 }
 
+uint8_t borra(arbavl *arb, uint8_t valor) {
+    uint8_t ret = 0;
+    nodoavl *nodo = buscaValor(arb, valor);
+
+    if (nodo == NULL) {
+        ret = 1;
+    }
+    else { /* el nodo a borrar existe */
+        if (borraNodo(nodo) == 0)
+            arb->numelem--;
+    }
+
+    return ret;
+}
+
 void borraAvl(arbavl *arb) {
     nodoavl *raiz= NULL;
 
@@ -97,7 +115,7 @@ void borraAvl(arbavl *arb) {
     if (raiz == NULL)
         printf("El árbol está vacío.\n");
     else
-        borraNodo(raiz);
+        borraAvlNodo(raiz);
 
     free(arb);
 }
@@ -241,10 +259,41 @@ static nodoavl *buscaNodo(nodoavl *nodo, uint8_t v) {
     return n;
 }
 
-static void borraNodo(nodoavl *nodo) {
+static int8_t borraNodo(nodoavl *nodo) {
+    nodoavl *n;
+    if (nodo == NULL) {
+        return 1;
+    }
+    else {
+        if ((nodo->izda == NULL) || (nodo->dcha == NULL)) { /* 0 o 1 hijo */
+            n = nodo->izda ? nodo->izda : nodo->dcha; /* n = no-NULL si hay */
+
+            if (n == NULL) { /* sin hijos, ambos eran NULL */
+                free(nodo);
+                return 0;
+            }
+            else { /* un hijo */
+                *nodo = *n; /* nodo ahora es igual que el hijo */
+                if (nodo->izda != NULL)
+                    nodo->izda->padre = nodo;
+                if (nodo->dcha != NULL)
+                    nodo->dcha->padre = nodo;
+                free(n);
+                return 0;
+            }
+        }
+        else { /* 2 hijos */
+            n = sucesor(nodo->dcha);
+            /* TODO */
+            return 0;
+        }
+    }
+}
+
+static void borraAvlNodo(nodoavl *nodo) {
     if (nodo != NULL) {
-        borraNodo(nodo->izda);
-        borraNodo(nodo->dcha);
+        borraAvlNodo(nodo->izda);
+        borraAvlNodo(nodo->dcha);
         free(nodo);
     }
 }
@@ -407,5 +456,15 @@ int8_t balanceadoNodo(nodoavl *nodo) {
 
 }
 
+static nodoavl *sucesor(nodoavl *nodo) {
+    nodoavl *actual = nodo;
 
+    if (actual == NULL)
+        return NULL;
+
+    while (actual->izda != NULL)
+        actual = actual->izda;
+
+    return actual;
+}
 
