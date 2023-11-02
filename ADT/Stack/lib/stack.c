@@ -1,3 +1,4 @@
+#include <stdio.h>     /* test   */
 #include <stdlib.h>    /* malloc */
 #include "inc/stack.h"
 
@@ -24,6 +25,10 @@ stack stack_new(void)
     s->count = 0;
     s->head  = NULL;
 
+    printf("[stack] creado stack en 0x%p\n", s);
+    printf("        count: %d\n", s->count);
+    printf("        head:  0x%p\n", s->head);
+
     return s;
 }
 
@@ -41,8 +46,8 @@ void stack_push(stack s, void *e)
     if (s == NULL)
         return;
 
-    s = malloc(sizeof *(s));
-    if (s == NULL)
+    i = malloc(sizeof *(i));
+    if (i == NULL)
         return;
 
     i->value = e;
@@ -50,6 +55,13 @@ void stack_push(stack s, void *e)
 
     s->head  = i;
     s->count++;
+
+    printf("[stack] nuevo elemento en 0x%p\n", i);
+    printf("        su valor es 0x%p\n", i->value);
+    printf("        su siguiente es 0x%p\n", i->next);
+    printf("        stack en 0x%p\n", s);
+    printf("        stack->head: 0x%p\n", s->head);
+    printf("        stack->count: %d\n", s->count);
 }
 
 void *stack_pop(stack s)

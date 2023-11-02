@@ -2,7 +2,8 @@
 #define _STACK_H_
 
 #define stack stack_t
-typedef struct stack *stack; /* stack es un *stack_t */
+typedef struct stack *stack; /* stack es un *stack_t                  */
+                             /* en el cliente: stack_t es un *stack_t */
 
 extern stack stack_new  (void);
 extern int   stack_empty(stack s);
