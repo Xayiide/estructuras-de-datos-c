@@ -16,6 +16,14 @@ int main()
     stack_push(s, &b);
     stack_push(s, &c);
 
+    a = *(int *) stack_pop(s);
+    b = *(int *) stack_pop(s);
+    c = *(int *) stack_pop(s);
+
+    printf("a: %d\n", a);
+    printf("b: %d\n", b);
+    printf("c: %d\n", c);
+
     return 0;
 }
 
