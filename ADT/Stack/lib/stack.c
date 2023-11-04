@@ -16,70 +16,59 @@ struct stack {
 
 stack stack_new(void)
 {
-    stack s;
+    stack stk;
 
-    s = malloc(sizeof *(s));
-    if (s == NULL)
+    stk = malloc(sizeof *(stk));
+    if (stk == NULL)
         return NULL;
 
-    s->count = 0;
-    s->head  = NULL;
+    stk->count = 0;
+    stk->head  = NULL;
 
-    printf("[stack] creado stack en 0x%p\n", s);
-    printf("        count: %d\n", s->count);
-    printf("        head:  0x%p\n", s->head);
-
-    return s;
+    return stk;
 }
 
-int stack_empty(stack s)
+int stack_empty(stack stk)
 {
-    if (s == NULL)
+    if (stk == NULL)
         return -1;
-    return s->count == 0;
+    return stk->count == 0;
 }
 
-void stack_push(stack s, void *e)
+void stack_push(stack stk, void *item)
 {
-    struct elem *i = NULL;
+    struct elem *node = NULL;
 
-    if (s == NULL)
+    if (stk == NULL)
         return;
 
-    i = malloc(sizeof *(i));
-    if (i == NULL)
+    node = malloc(sizeof *(node));
+    if (node == NULL)
         return;
 
-    i->value = e;
-    i->next  = s->head;
+    node->value = item;
+    node->next  = stk->head;
 
-    s->head  = i;
-    s->count++;
-
-    printf("[stack] nuevo elemento en 0x%p\n", i);
-    printf("        su valor es 0x%p\n", i->value);
-    printf("        su siguiente es 0x%p\n", i->next);
-    printf("        stack en 0x%p\n", s);
-    printf("        stack->head: 0x%p\n", s->head);
-    printf("        stack->count: %d\n", s->count);
+    stk->head = node;
+    stk->count++;
 }
 
-void *stack_pop(stack s)
+void *stack_pop(stack stk)
 {
-    void        *x;
-    struct elem *i;
+    void        *pop_value;
+    struct elem *node;
 
-    if (s == NULL || s->count == 0)
+    if (stk == NULL || stk->count == 0)
         return NULL;
 
-    i = s->head;
-    s->head = i->next;
-    s->count--;
+    node      = stk->head;
+    pop_value = node->value;
 
-    x = i->value;
+    stk->head = node->next;
+    stk->count--;
 
-    free(i);
-    return x;
+    free(node);
+    return pop_value;
 }
 
 void stack_free(stack *s)
