@@ -27,8 +27,8 @@ clean:
 re: clean all
 
 install: all
-	@cp $(TRGT) ../client/lib/
-	@cp inc/$(HDRS) ../client/inc/
+	#@cp $(TRGT) ../client/lib/
+	#@cp inc/$(HDRS) ../client/inc/
 
 test: $(TRGT)
 	$(CC) $(CFLAGS) test.c -L./ -lstack -o test
