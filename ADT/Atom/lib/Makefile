@@ -31,7 +31,7 @@ install: all
 	#@cp inc/$(HDRS) ../client/inc/
 
 test: $(TRGT)
-	$(CC) $(CFLAGS) test.c -L./ -lstack -o test
+	$(CC) $(CFLAGS) test.c -L./ -latom -o test
 
 run: test
 	@./test
